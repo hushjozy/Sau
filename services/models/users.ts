@@ -1,0 +1,32 @@
+export interface IUser {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  fullName: string | null;
+  email: string | null;
+  phoneNumber: string | null;
+  designation: string | null;
+  employeeId: string | null;
+  isSuperAdmin: boolean;
+  locationId: number | null;
+  location: string | null;
+  locationName: string | null;
+  functionId: number;
+  function: string | null;
+  functionName: string | null;
+  unitId: number;
+  unit: string | null;
+  headOfUnit: string | null;
+  lineManagerEmail: string | null;
+  lineManager: string | null;
+  managerId: string | null;
+  headOfUnitEmail: string | null;
+  headOfFunction: string | null;
+  headOfFunctionEmail: string | null;
+  hrbp: string | null;
+  hrbpEmail: string | null;
+  lastActive: string | null;
+  isOnline: boolean;
+  profileImageUrl: string | null;
+  roles: [{ id: string; roleName: string }];
+}
