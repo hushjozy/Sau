@@ -1,5 +1,4 @@
-"use client";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -10,7 +9,7 @@ export default function CustomTabBar() {
         headerShown: false,
       }}
       tabBar={({ state, descriptors, navigation }) => (
-        <View className="flex-row bg-white border-t border-gray-200 h-[65px]">
+        <View style={styles.tabBar}>
           {state.routes.map((route, index) => {
             const isFocused = state.index === index;
             const { options } = descriptors[route.key];
@@ -22,7 +21,7 @@ export default function CustomTabBar() {
             return (
               <TouchableOpacity
                 key={route.name}
-                className="flex-1 items-center justify-center"
+                style={styles.tabButton}
                 onPress={() => navigation.navigate(route.name)}
               >
                 <Ionicons
@@ -31,9 +30,7 @@ export default function CustomTabBar() {
                   color={isFocused ? "teal" : "gray"}
                 />
                 <Text
-                  className={`text-xs ${
-                    isFocused ? "text-teal-600 font-semibold" : "text-gray-500"
-                  }`}
+                  style={[styles.tabLabel, isFocused && styles.tabLabelFocused]}
                 >
                   {options.title || route.name}
                 </Text>
@@ -67,3 +64,26 @@ export default function CustomTabBar() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    borderTopWidth: 1,
+    borderTopColor: "#e5e7eb", // gray-200
+    height: 65,
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tabLabel: {
+    fontSize: 12,
+    color: "#6b7280", // gray-500
+  },
+  tabLabelFocused: {
+    color: "#0d9488", // teal-600
+    fontWeight: "600",
+  },
+});

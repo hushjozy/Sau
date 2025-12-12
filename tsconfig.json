@@ -1,18 +1,40 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "types": ["nativewind/types"],
+    "jsx": "react-native",
+    "types": [
+      "nativewind/types"
+    ],
     "strict": true,
+    "skipLibCheck": true,
     "paths": {
-      "@/*": ["./*"],
-      "@components/*": ["./components/*"],
-      "@constants/*": ["./constants/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@lib/*": ["./lib/*"],
-      "@locales/*": ["./locales/*"],
-      "@provider/*": ["./provider/*"],
-      "@services/*": ["./services/*"],
-      "@components/ui/*": ["./components/ui/*"]
+      "@/*": [
+        "./*"
+      ],
+      "@components/*": [
+        "./components/*"
+      ],
+      "@constants/*": [
+        "./constants/*"
+      ],
+      "@hooks/*": [
+        "./hooks/*"
+      ],
+      "@lib/*": [
+        "./lib/*"
+      ],
+      "@locales/*": [
+        "./locales/*"
+      ],
+      "@provider/*": [
+        "./provider/*"
+      ],
+      "@services/*": [
+        "./services/*"
+      ],
+      "@components/ui/*": [
+        "./components/ui/*"
+      ]
     }
   },
   "include": [
@@ -20,6 +42,7 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/auth/otp.tsx"
+    "app/auth/otp.tsx",
+    "nativewind-env.d.ts"
   ]
 }

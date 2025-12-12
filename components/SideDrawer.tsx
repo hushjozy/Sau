@@ -1,4 +1,3 @@
-// components/SideDrawer.tsx
 import React, { useEffect, useRef } from "react";
 import {
   Modal,
@@ -8,9 +7,9 @@ import {
   ScrollView,
   Animated,
   Dimensions,
+  StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
 
 type SideDrawerProps = {
   isOpen: boolean;
@@ -19,69 +18,53 @@ type SideDrawerProps = {
 
 export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
   const { width } = Dimensions.get("window");
-  const slideAnim = useRef(new Animated.Value(-width)).current; // start off-screen left
+  const slideAnim = useRef(new Animated.Value(-width)).current;
 
   useEffect(() => {
-    if (isOpen) {
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(slideAnim, {
-        toValue: -width,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
+    Animated.timing(slideAnim, {
+      toValue: isOpen ? 0 : -width,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   }, [isOpen]);
+
   return (
     <Modal visible={isOpen} animationType="none" transparent>
       <Animated.View
-        style={{
-          transform: [{ translateX: slideAnim }],
-          shadowColor: "#000",
-          shadowOpacity: 0.2,
-          shadowRadius: 6,
-          elevation: 5,
-        }}
-        className="absolute left-0 top-0 pt-[60px] bottom-0 w-[85%] bg-white shadow-lg"
+        style={[
+          styles.drawerContainer,
+          {
+            transform: [{ translateX: slideAnim }],
+          },
+        ]}
       >
-        <Pressable
-          className="ml-auto mr-8 p-1 rounded-full bg-[#1a9b94]"
-          onPress={onClose}
-        >
+        <Pressable style={styles.closeButton} onPress={onClose}>
           <Ionicons name="close" color="white" size={25} />
         </Pressable>
-        <ScrollView className="flex-1">
-          <View className="p-6 pb-4">
-            <View className="flex-row items-start mb-4">
-              <View className="h-16 w-16 bg-[#B8E6E1] rounded-full items-center justify-center">
-                <Text className="text-2xl font-bold text-gray-700">KO</Text>
+
+        <ScrollView style={styles.scroll}>
+          <View style={styles.headerSection}>
+            <View style={styles.profileRow}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>KO</Text>
               </View>
-              <View className="flex-1 ml-4">
-                <Text className="text-xl font-bold text-gray-900 leading-tight mb-1">
-                  Kehinde OSHUNGBOYE
-                </Text>
-                <Text className="text-gray-600 text-base mb-2">Nigeria</Text>
+
+              <View style={styles.profileInfo}>
+                <Text style={styles.profileName}>Kehinde OSHUNGBOYE</Text>
+                <Text style={styles.profileLocation}>Nigeria</Text>
+
                 <Pressable onPress={() => {}}>
-                  <Text className="text-[#1a9b94]">Change Location</Text>
+                  <Text style={styles.changeLocation}>Change Location</Text>
                 </Pressable>
               </View>
             </View>
 
-            <Pressable
-              className="w-full bg-[#1a9b94] py-3 rounded-xl items-center"
-              onPress={() => {}}
-            >
-              <Text className="text-white font-semibold text-lg">
-                View Profile
-              </Text>
+            <Pressable style={styles.profileButton} onPress={() => {}}>
+              <Text style={styles.profileButtonText}>View Profile</Text>
             </Pressable>
           </View>
 
-          <View className="px-4 space-y-2">
+          <View style={styles.menuList}>
             {[
               { icon: "gift-outline", label: "Prizes" },
               { icon: "ticket-outline", label: "Vouchers" },
@@ -89,17 +72,12 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
               { icon: "star-outline", label: "Rate Us" },
               { icon: "heart-outline", label: "Favourites" },
               { icon: "chatbox-ellipses-outline", label: "I Want" },
-            ].map((m, i) => (
-              <Pressable
-                key={i}
-                className="flex-row items-center px-3 py-4 rounded-lg"
-                onPress={() => {}}
-              >
-                <Ionicons name={m.icon as any} size={22} color="#374151" />
-                <Text className="ml-4 text-lg font-medium text-gray-900">
-                  {m.label}
-                </Text>
-                <View className="flex-1" />
+            ].map((item, index) => (
+              <Pressable key={index} style={styles.menuItem} onPress={() => {}}>
+                <Ionicons name={item.icon as any} size={22} color="#374151" />
+                <Text style={styles.menuLabel}>{item.label}</Text>
+
+                <View style={{ flex: 1 }} />
                 <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
               </Pressable>
             ))}
@@ -111,3 +89,114 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
 };
 
 export default SideDrawer;
+
+const styles = StyleSheet.create({
+  drawerContainer: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: "85%",
+    backgroundColor: "white",
+    paddingTop: 60,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+
+  closeButton: {
+    marginLeft: "auto",
+    marginRight: 32,
+    padding: 4,
+    borderRadius: 999,
+    backgroundColor: "#1a9b94",
+  },
+
+  scroll: {
+    flex: 1,
+  },
+
+  headerSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+  },
+
+  profileRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 16,
+  },
+
+  avatar: {
+    height: 64,
+    width: 64,
+    backgroundColor: "#B8E6E1",
+    borderRadius: 32,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  avatarText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#4b5563",
+  },
+
+  profileInfo: {
+    flex: 1,
+    marginLeft: 16,
+  },
+
+  profileName: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#111827",
+    marginBottom: 4,
+  },
+
+  profileLocation: {
+    fontSize: 16,
+    color: "#4b5563",
+    marginBottom: 8,
+  },
+
+  changeLocation: {
+    color: "#1a9b94",
+    fontSize: 15,
+  },
+
+  profileButton: {
+    width: "100%",
+    backgroundColor: "#1a9b94",
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+
+  profileButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+
+  menuList: {
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+  },
+
+  menuLabel: {
+    marginLeft: 16,
+    fontSize: 18,
+    fontWeight: "500",
+    color: "#111827",
+  },
+});

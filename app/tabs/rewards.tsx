@@ -1,11 +1,8 @@
-// app/rewards/index.tsx
 import React, { useState } from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { SideDrawer } from "../../components/SideDrawer"; // path from app/ to components/
-import { GestureResponderEvent } from "react-native";
+import { SideDrawer } from "../../components/SideDrawer";
 
 const rewardItems = [
   { icon: "🪙", label: "Redeem your Points" },
@@ -21,86 +18,71 @@ export default function RewardsScreen() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#f5f5f5]">
+    <SafeAreaView style={styles.container}>
       <SideDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
       />
 
       {/* Header */}
-      <View className="bg-white px-4 py-3 flex-row items-center justify-between shadow-sm">
+      <View style={styles.header}>
         <Pressable
           onPress={() => setIsDrawerOpen(true)}
-          className="p-2 -ml-2 rounded-lg"
+          style={styles.menuButton}
           android_ripple={{ color: "#f3f4f6" }}
         >
           <Ionicons name="menu-outline" size={22} color="#374151" />
         </Pressable>
 
-        <View className="flex-row items-center gap-2">
-          <View className="flex-row items-center gap-1">
-            <Text className="text-gray-700 font-bold text-lg uppercase">
-              LAFARGE Applause
-            </Text>
-          </View>
+        <View style={styles.headerTitleWrapper}>
+          <Text style={styles.headerTitle}>LAFARGE Applause</Text>
         </View>
 
-        <View className="w-10" />
+        <View style={styles.headerRightSpacer} />
       </View>
 
       {/* Content */}
-      <ScrollView className="flex-1 p-3 space-y-4 pb-6">
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Hero Banner */}
-        <View className="relative rounded-2xl p-6 shadow-lg overflow-hidden bg-black">
-          <View className="flex-row items-center justify-between">
+        <View style={styles.heroCard}>
+          <View style={styles.heroRow}>
             <View>
-              <Text className="text-white text-3xl font-bold leading-tight">
-                the <Text className="text-[#ffd700]">Star</Text>
+              <Text style={styles.heroText}>
+                the <Text style={styles.heroHighlight}>Star</Text>
               </Text>
-              <Text className="text-white text-3xl font-bold leading-tight">
-                Among Us
-              </Text>
+              <Text style={styles.heroText}>Among Us</Text>
             </View>
 
-            <View className="relative">
-              <View className="w-20 h-20 bg-[#1a9b94] rounded-full items-center justify-center">
-                <Text className="text-white text-2xl">★</Text>
+            <View>
+              <View style={styles.heroBadge}>
+                <Text style={styles.badgeStar}>★</Text>
               </View>
             </View>
           </View>
         </View>
 
-        {/* My Wallet Card */}
-        <View className="bg-[#d4f1ed] rounded-2xl px-3 py-1 flex-row items-center gap-4">
-          <Text className="text-[35px]">💰</Text>
+        {/* Wallet */}
+        <View style={styles.walletCard}>
+          <Text style={styles.walletEmoji}>💰</Text>
           <View>
-            <Text className="text-gray-900 text-lg font-semibold">
-              My Wallet
-            </Text>
-            <Text className="text-gray-900 text-2xl font-bold">0 NGN</Text>
+            <Text style={styles.walletTitle}>My Wallet</Text>
+            <Text style={styles.walletAmount}>0 NGN</Text>
           </View>
         </View>
 
-        {/* Section Title */}
-        <Text className="text-gray-900 text-[20px] mb-2 font-bold px-1">
-          Rewards & Recognition
-        </Text>
+        <Text style={styles.sectionTitle}>Rewards & Recognition</Text>
 
         {/* Reward Items */}
-        <View className="pl-4 w-full  gap-y-3 justify-center items-center">
+        <View style={styles.itemsWrapper}>
           {rewardItems.map((item, idx) => (
             <Pressable
               key={idx}
-              className="w-full bg-white rounded-xl p-3 flex-row items-center gap-4 shadow-sm"
+              style={styles.itemCard}
               android_ripple={{ color: "#f3f4f6" }}
-              onPress={() => {
-                // navigate or open detail
-              }}
+              onPress={() => {}}
             >
-              <Text className="text-3xl">{item.icon}</Text>
-              <Text className="flex-1 text-left text-[14px] font-semibold text-gray-900">
-                {item.label}
-              </Text>
+              <Text style={styles.itemIcon}>{item.icon}</Text>
+              <Text style={styles.itemLabel}>{item.label}</Text>
               <Ionicons
                 name="chevron-forward-outline"
                 size={18}
@@ -113,3 +95,148 @@ export default function RewardsScreen() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+
+  /* HEADER */
+  header: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  menuButton: {
+    padding: 8,
+    marginLeft: -8,
+    borderRadius: 8,
+  },
+  headerTitleWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  headerTitle: {
+    color: "#374151",
+    fontWeight: "bold",
+    fontSize: 18,
+    textTransform: "uppercase",
+  },
+  headerRightSpacer: {
+    width: 40,
+  },
+
+  /* MAIN CONTENT */
+  scrollContent: {
+    paddingHorizontal: 12,
+    paddingBottom: 24,
+    gap: 16,
+  },
+
+  /* HERO */
+  heroCard: {
+    backgroundColor: "#000",
+    padding: 24,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 4,
+  },
+  heroRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  heroText: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold",
+    lineHeight: 34,
+  },
+  heroHighlight: {
+    color: "#ffd700",
+  },
+  heroBadge: {
+    width: 80,
+    height: 80,
+    backgroundColor: "#1a9b94",
+    borderRadius: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  badgeStar: {
+    color: "#fff",
+    fontSize: 28,
+  },
+
+  /* WALLET */
+  walletCard: {
+    backgroundColor: "#d4f1ed",
+    borderRadius: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    gap: 16,
+  },
+  walletEmoji: {
+    fontSize: 35,
+  },
+  walletTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#111",
+  },
+  walletAmount: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#111",
+  },
+
+  /* SECTION */
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#111",
+    marginLeft: 4,
+  },
+
+  /* ITEMS LIST */
+  itemsWrapper: {
+    width: "100%",
+    paddingLeft: 12,
+    gap: 12,
+    alignItems: "center",
+  },
+  itemCard: {
+    width: "100%",
+    backgroundColor: "#fff",
+    borderRadius: 14,
+    padding: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+  },
+  itemIcon: {
+    fontSize: 28,
+  },
+  itemLabel: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#111",
+  },
+});
