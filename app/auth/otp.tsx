@@ -92,7 +92,7 @@ export default function EnterOTP() {
 
   return (
     <Container>
-      <View style={{ gap: 30 }} className="mt-3">
+      <View style={{ gap: 30 }}>
         <Typography
           style={{ fontSize: 16, fontFamily: "Light" }}
           interpolation={{ email: "joseph.osho.ext@lafarge.com" }}

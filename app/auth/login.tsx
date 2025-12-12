@@ -99,7 +99,6 @@ export default function LoginScreen() {
         // onBlur={onBlur}
         // error={!!errors.email?.message}
         // errorMessage={errors.email?.message}
-        className="w-full"
       />
       {/* )}
         name="email" */}
