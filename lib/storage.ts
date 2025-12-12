@@ -1,42 +1,36 @@
-import { MMKV } from "react-native-mmkv";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const DATA_PREFIX = "tikeeti::";
-export const storage = new MMKV({
-  id: `${DATA_PREFIX}-storage`,
-  encryptionKey: `${DATA_PREFIX}-encryptionKey`,
-});
 
-export function saveItem<T>(key: string, value: string | T) {
+export async function saveItem<T>(key: string, value: string | T) {
+  let storedValue = value;
   if (typeof value === "object") {
-    storage.set(`${DATA_PREFIX}${key}`, JSON.stringify(value));
+    storedValue = JSON.stringify(value);
+  } else if (typeof value === "boolean") {
+    storedValue = value ? "true" : "false";
   }
-  if (typeof value === "string") {
-    storage.set(`${DATA_PREFIX}${key}`, value);
-  }
-  if (typeof value === "boolean") {
-    storage.set(`${DATA_PREFIX}${key}`, value);
-  }
+  await AsyncStorage.setItem(`${DATA_PREFIX}${key}`, storedValue as string);
 }
 
-export function getItem(
+export async function getItem<T>(
   key: string,
   type: "string" | "boolean" | "number" | "object"
-) {
-  if (type === "object") {
-    const got = storage.getString(`${DATA_PREFIX}${key}`);
-    return got ? JSON.parse(got) : null;
-  }
-  if (type === "string") {
-    return storage.getString(`${DATA_PREFIX}${key}`);
-  }
-  if (type === "boolean") {
-    return storage.getBoolean(`${DATA_PREFIX}${key}`);
-  }
-  if (type === "number") {
-    return storage.getNumber(`${DATA_PREFIX}${key}`);
+): Promise<T | null> {
+  const value = await AsyncStorage.getItem(`${DATA_PREFIX}${key}`);
+  if (!value) return null;
+
+  switch (type) {
+    case "object":
+      return JSON.parse(value) as T;
+    case "boolean":
+      return (value === "true") as unknown as T;
+    case "number":
+      return Number(value) as unknown as T;
+    case "string":
+      return value as unknown as T;
   }
 }
 
-export function removeItem(key: string): void {
-  storage.delete(`${DATA_PREFIX}${key}`);
+export async function removeItem(key: string) {
+  await AsyncStorage.removeItem(`${DATA_PREFIX}${key}`);
 }
