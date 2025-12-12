@@ -1,0 +1,17 @@
+{
+  "Welcome back!": "Welcome back!",
+  "Let’s sign you in.": "Let’s sign you in.",
+  "EMAIL": "EMAIL",
+  "SIGN IN": "SIGN IN",
+  "Enter your email address": "Enter your email address",
+  "NEXT": "NEXT",
+  "Enter OTP": "Enter OTP",
+  "Resend Code in": "Resend Code in",
+  "Didn’t receive any code?": "Didn’t receive any code?",
+  "VERIFY": "VERIFY",
+  "Email is required": "Email is required",
+  "Must be a valid email": "Must be a valid email",
+  "Enter the verification code we just sent to the email address": "Enter the verification code we just sent to the email address {{email}}",
+  "Click here": "Click here",
+  "Glad you’re here": "Glad you’re here"
+}

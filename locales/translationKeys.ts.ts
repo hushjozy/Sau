@@ -1,0 +1,16 @@
+export type TranslationKeys =
+  | "Welcome back!"
+  | "Let’s sign you in."
+  | "EMAIL"
+  | "SIGN IN"
+  | "Enter your email address"
+  | "NEXT"
+  | "Enter OTP"
+  | "Resend Code in"
+  | "Didn’t receive any code?"
+  | "VERIFY"
+  | "Email is required"
+  | "Must be a valid email"
+  | "Enter the verification code we just sent to the email address"
+  | "Click here"
+  | "Glad you’re here";

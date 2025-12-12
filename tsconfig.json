@@ -4,7 +4,15 @@
     "types": ["nativewind/types"],
     "strict": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@components/*": ["./components/*"],
+      "@constants/*": ["./constants/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@lib/*": ["./lib/*"],
+      "@locales/*": ["./locales/*"],
+      "@provider/*": ["./provider/*"],
+      "@services/*": ["./services/*"],
+      "@components/ui/*": ["./components/ui/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
