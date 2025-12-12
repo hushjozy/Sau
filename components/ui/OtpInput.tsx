@@ -10,7 +10,7 @@ import {
   Keyboard,
   Platform,
 } from "react-native";
-import * as Clipboard from "expo-clipboard";
+// import * as Clipboard from "expo-clipboard";
 import { BLACK, BORDER, DANGER, PRIMARY, WHITE } from "@constants/colors";
 import { useTheme } from "@provider/ThemeProvider";
 
@@ -32,23 +32,23 @@ function OtpInput({ length, onOtpChange, error }: OtpInputProps) {
     // When component mounts, ensure keyboard opens with the first input
     // First dismiss any existing keyboard to reset state
     Keyboard.dismiss();
-    
+
     // Platform-specific handling for keyboard focus issues
     const timer = setTimeout(() => {
       // Focus on the first input which should trigger the keyboard
       if (inputRefs.current[0]) {
         inputRefs.current[0].focus();
         // On Android, sometimes we need to blur and focus again to show keyboard
-        
-        // if (Platform.OS === 'android') {
-        //   setTimeout(() => {
-        //     inputRefs.current[0]?.blur();
-        //     setTimeout(() => inputRefs.current[0]?.focus(), 50);
-        //   }, 50);
-        // }
+
+        if (Platform.OS === "android") {
+          setTimeout(() => {
+            inputRefs.current[0]?.blur();
+            setTimeout(() => inputRefs.current[0]?.focus(), 50);
+          }, 50);
+        }
       }
     }, 150);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -121,10 +121,9 @@ function OtpInput({ length, onOtpChange, error }: OtpInputProps) {
     // Detect if a paste action occurred (selection start and end are different)
     if (start > 1 && end > 1) {
       try {
-        const copiedContent = await Clipboard.getStringAsync();
-        if (copiedContent === "") return;
-
-        handlePaste(index, copiedContent);
+        // const copiedContent = await Clipboard.getStringAsync();
+        // if (copiedContent === "") return;
+        // handlePaste(index, copiedContent);
       } catch (error) {
         console.error(error);
       }

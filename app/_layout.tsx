@@ -8,7 +8,6 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
-import "../global.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 export {
   // Catch any errors thrown by the Layout component.
@@ -55,6 +54,7 @@ function RootLayoutNav() {
     <ThemeProvider value={DefaultTheme}>
       <QueryClientProvider client={queryClient}>
         <Stack initialRouteName="auth">
+          <Stack.Screen name="/" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
           <Stack.Screen name="tabs" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />

@@ -84,7 +84,10 @@ function TextField(props: Props, ref: React.Ref<TextInput>) {
         ]}
         className="max-w-[100%]"
       >
-        <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+        <View
+          style={{ flexDirection: "row", gap: 5, alignItems: "center" }}
+          className={`${props.className}`}
+        >
           {prefixIcon && prefixIcon}
 
           <TextInput
@@ -101,6 +104,7 @@ function TextField(props: Props, ref: React.Ref<TextInput>) {
               },
               inputStyle,
             ]}
+            className={`${props.className}`}
           />
         </View>
         {icon && icon}

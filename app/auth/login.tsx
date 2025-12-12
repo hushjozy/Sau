@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { z } from "zod";
@@ -45,7 +44,9 @@ export default function LoginScreen() {
     mutationFn: (email: string) => login({ email }),
 
     onSuccess: (res, email) => {
-      if (res?.data) {
+      if (res?.data?.data?.responseData) {
+        console.log(res);
+
         router.push({
           pathname: "/auth/otp",
           params: { email },
@@ -98,6 +99,7 @@ export default function LoginScreen() {
         // onBlur={onBlur}
         // error={!!errors.email?.message}
         // errorMessage={errors.email?.message}
+        className="w-full"
       />
       {/* )}
         name="email" */}

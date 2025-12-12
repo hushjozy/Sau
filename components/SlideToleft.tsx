@@ -1,63 +1,62 @@
 import React, { useRef } from "react";
 import { Animated, StyleSheet, View, ViewProps } from "react-native";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+// import Swipeable from "react-native-gesture-handler/Swipeable";
 import SliderButton from "./SliderButton";
-import { Trash } from "iconsax-react-nativejs";
+// import { Trash } from "iconsax-react-nativejs";
 
 type SLIDE_TO_LEFT_TYPE = {
   onRightPress: () => void;
 } & ViewProps;
 
 const SlideToLeft = ({ onRightPress, ...props }: SLIDE_TO_LEFT_TYPE) => {
-  const swipeableRowRef = useRef<Swipeable>(null);
+  // const swipeableRowRef = useRef<Swipeable>(null);
 
   const close = () => {
-    swipeableRowRef.current?.close();
+    // swipeableRowRef.current?.close();
   };
 
-  const renderRightActions = (
-    progress: Animated.AnimatedInterpolation<string | number>,
-    dragX: Animated.AnimatedInterpolation<string | number>
-  ) => {
-    const trans = dragX.interpolate({
-      inputRange: [-101, -100, -50, 0],
-      outputRange: [-1, 0, 0, 20],
-    });
+  // const renderRightActions = (
+  //   progress: Animated.AnimatedInterpolation<string | number>,
+  //   dragX: Animated.AnimatedInterpolation<string | number>
+  // ) => {
+  //   const trans = dragX.interpolate({
+  //     inputRange: [-101, -100, -50, 0],
+  //     outputRange: [-1, 0, 0, 20],
+  //   });
 
-    const opacity = dragX.interpolate({
-      inputRange: [-80, 0],
-      outputRange: [1, 0],
-      extrapolate: "clamp",
-    });
-    return (
-      <SliderButton
-        onPress={() => {
-          onRightPress();
-          close();
-        }}
-      >
-        <Animated.View
-          style={[
-            styles.rightWrapper,
-            {
-              transform: [{ translateX: trans }],
-            },
-          ]}
-        >
-          <Animated.View style={[styles.iconWrapper, { opacity: opacity }]}>
-            <Trash size={20} />
-          </Animated.View>
-        </Animated.View>
-      </SliderButton>
-    );
-  };
+  //   const opacity = dragX.interpolate({
+  //     inputRange: [-80, 0],
+  //     outputRange: [1, 0],
+  //     extrapolate: "clamp",
+  //   });
+  //   return (
+  //     <SliderButton
+  //       onPress={() => {
+  //         onRightPress();
+  //         close();
+  //       }}
+  //     >
+  //       <Animated.View
+  //         style={[
+  //           styles.rightWrapper,
+  //           {
+  //             transform: [{ translateX: trans }],
+  //           },
+  //         ]}
+  //       >
+  //         <Animated.View style={[styles.iconWrapper, { opacity: opacity }]}>
+  //           <Trash size={20} />
+  //         </Animated.View>
+  //       </Animated.View>
+  //     </SliderButton>
+  //   );
+  // };
 
-  return (
-    // @ts-ignore
-    <Swipeable ref={swipeableRowRef} renderRightActions={renderRightActions}>
-      <View {...props} />
-    </Swipeable>
-  );
+  return null;
+  // @ts-ignore
+  // <Swipeable ref={swipeableRowRef} renderRightActions={renderRightActions}>
+  //   <View {...props} />
+  // </Swipeable>
 };
 
 export default SlideToLeft;

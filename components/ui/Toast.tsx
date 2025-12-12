@@ -1,6 +1,6 @@
 import { WHITE } from "@constants/colors";
-import CloseIcon from "@assets/icons/CloseIcon";
-import ToastIcon from "@assets/icons/toast-icon";
+// import CloseIcon from "@assets/icons/CloseIcon";
+// import ToastIcon from "@assets/icons/toast-icon";
 import { ToastModalParams } from "@provider/ToastProvider";
 import * as Haptics from "expo-haptics";
 import React, { useCallback, useEffect } from "react";
@@ -12,16 +12,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, {
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withSequence,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+// import { Gesture, GestureDetector } from "react-native-gesture-handler";
+// import Animated, {
+//   runOnJS,
+//   useAnimatedStyle,
+//   useSharedValue,
+//   withDelay,
+//   withSequence,
+//   withSpring,
+//   withTiming,
+// } from "react-native-reanimated";
 
 type ToastProps = {
   open: boolean;
@@ -32,8 +32,8 @@ type ToastProps = {
 const { width: WIDTH } = Dimensions.get("screen");
 
 const Toast = ({ open, toastModalOptions, closeModal }: ToastProps) => {
-  const toastTopAnimation = useSharedValue(-100);
-  const context = useSharedValue(0);
+  // const toastTopAnimation = useSharedValue(-100);
+  // const context = useSharedValue(0);
 
   const TOP_VALUE = Platform.OS === "ios" ? 60 : 30;
 
@@ -46,71 +46,71 @@ const Toast = ({ open, toastModalOptions, closeModal }: ToastProps) => {
         : Haptics.NotificationFeedbackType.Error
     );
 
-    toastTopAnimation.value = withSequence(
-      withTiming(TOP_VALUE),
-      withDelay(
-        toastModalOptions.duration,
-        withTiming(-100, undefined, (finish) => {
-          if (finish) {
-            runOnJS(closeModal)();
-          }
-        })
-      )
-    );
-  }, [TOP_VALUE, toastTopAnimation]);
+    //   toastTopAnimation.value = withSequence(
+    //     withTiming(TOP_VALUE),
+    //     withDelay(
+    //       toastModalOptions.duration,
+    //       withTiming(-100, undefined, (finish) => {
+    //         if (finish) {
+    //           runOnJS(closeModal)();
+    //         }
+    //       })
+    //     )
+    //   );
+  }, [TOP_VALUE]);
 
   const close = () => {
-    toastTopAnimation.value = withSequence(
-      withTiming(-100, undefined, (finish) => {
-        if (finish) {
-          runOnJS(closeModal)();
-        }
-      })
-    );
+    // toastTopAnimation.value = withSequence(
+    //   withTiming(-100, undefined, (finish) => {
+    //     if (finish) {
+    //       runOnJS(closeModal)();
+    //     }
+    //   })
+    // );
   };
 
-  const animatedTopStyles = useAnimatedStyle(() => {
-    return {
-      top: toastTopAnimation.value,
-    };
-  });
+  // const animatedTopStyles = useAnimatedStyle(() => {
+  //   return {
+  //     // top: toastTopAnimation.value,
+  //   };
+  // });
 
-  const pan = Gesture.Pan()
-    .onBegin(() => {
-      context.value = toastTopAnimation.value;
-    })
-    .onUpdate((event) => {
-      if (event.translationY < 100) {
-        toastTopAnimation.value = withSpring(
-          context.value + event.translationY,
-          {
-            damping: 600,
-            stiffness: 100,
-          }
-        );
-      }
-    })
-    .onEnd((event) => {
-      if (event.translationY < 0) {
-        toastTopAnimation.value = withTiming(-100, undefined, (finish) => {
-          if (finish) {
-            runOnJS(closeModal)();
-          }
-        });
-      } else if (event.translationY > 0) {
-        toastTopAnimation.value = withSequence(
-          withTiming(TOP_VALUE),
-          withDelay(
-            toastModalOptions.duration,
-            withTiming(-100, undefined, (finish) => {
-              if (finish) {
-                runOnJS(closeModal)();
-              }
-            })
-          )
-        );
-      }
-    });
+  // const pan = Gesture.Pan()
+  //   .onBegin(() => {
+  //     context.value = toastTopAnimation.value;
+  //   })
+  //   .onUpdate((event) => {
+  //     if (event.translationY < 100) {
+  //       toastTopAnimation.value = withSpring(
+  //         context.value + event.translationY,
+  //         {
+  //           damping: 600,
+  //           stiffness: 100,
+  //         }
+  //       );
+  //     }
+  //   })
+  //   .onEnd((event) => {
+  //     if (event.translationY < 0) {
+  //       toastTopAnimation.value = withTiming(-100, undefined, (finish) => {
+  //         if (finish) {
+  //           runOnJS(closeModal)();
+  //         }
+  //       });
+  //     } else if (event.translationY > 0) {
+  //       toastTopAnimation.value = withSequence(
+  //         withTiming(TOP_VALUE),
+  //         withDelay(
+  //           toastModalOptions.duration,
+  //           withTiming(-100, undefined, (finish) => {
+  //             if (finish) {
+  //               runOnJS(closeModal)();
+  //             }
+  //           })
+  //         )
+  //       );
+  //     }
+  //   });
 
   useEffect(() => {
     if (open) {
@@ -120,7 +120,7 @@ const Toast = ({ open, toastModalOptions, closeModal }: ToastProps) => {
 
   return (
     <>
-      {open && (
+      {/* {open && (
         <GestureDetector gesture={pan}>
           <Animated.View
             style={[
@@ -194,7 +194,7 @@ const Toast = ({ open, toastModalOptions, closeModal }: ToastProps) => {
             </TouchableOpacity>
           </Animated.View>
         </GestureDetector>
-      )}
+      )} */}
     </>
   );
 };

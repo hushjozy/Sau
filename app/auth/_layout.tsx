@@ -9,7 +9,7 @@ export default function AuthLayout() {
     // />
     <Stack initialRouteName="login">
       <Stack.Screen name="login" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="otp" options={{ headerShown: false }} /> */}
+      <Stack.Screen name="otp" options={{ headerShown: false }} />
       <Stack.Screen name="modal" options={{ presentation: "modal" }} />
     </Stack>
   );

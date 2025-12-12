@@ -9,7 +9,7 @@ export const login = async (body: { email: string }) => {
     data: body,
   };
 
-  const response = await makeRequest<boolean>(config);
+  const response = await makeRequest<Partial<boolean>>(config);
 
   return response.data;
 };
