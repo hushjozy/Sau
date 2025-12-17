@@ -31,7 +31,7 @@ export default function LoginScreen() {
     refetch,
   } = useQuery({
     queryKey: ["login", email, submit],
-    queryFn: () => login({ email }),
+    queryFn: () => login(email),
   });
 
   // const {
@@ -41,10 +41,11 @@ export default function LoginScreen() {
   // } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
 
   const loginMutation = useMutation({
-    mutationFn: (email: string) => login({ email }),
+    mutationFn: (email: string) => login(email),
 
     onSuccess: (res, email) => {
-      if (res?.data?.data?.responseData) {
+      // console.log(res, "loginres");
+      if (res?.data?.requestSuccessful) {
         console.log(res);
 
         router.push({
@@ -71,46 +72,80 @@ export default function LoginScreen() {
   });
 
   const onSubmit = () => {
+    // console.log("submitting", email);
     loginMutation.mutate(email);
   };
 
   return (
-    <Container style={{ gap: 25, paddingTop: top + 100 }}>
-      <View style={{ gap: 15 }}>
-        <Typography
-          style={{ fontFamily: "Bold", fontSize: 30 }}
-          interpolation={{ name: "email" }}
-        >
-          {"Welcome back !"}
-        </Typography>
-        <Typography style={{ fontFamily: "Light", fontSize: 16 }}>
-          {"Let’s sign you in."}
-        </Typography>
-      </View>
-      {/* <Controller
-        // control={control}
-        render={({ field: { onChange, onBlur, value } }) => ( */}
-      <TextField
-        label="EMAIL"
-        onChangeText={(v: string) => setEmail(v)}
-        placeholder="Enter your email address"
-        placeholderTextColor="#8391A1"
-        value={email}
-        // onBlur={onBlur}
-        // error={!!errors.email?.message}
-        // errorMessage={errors.email?.message}
-      />
-      {/* )}
-        name="email" */}
-      {/* /> */}
-      <Button
-        label={"NEXT"}
-        onPress={onSubmit}
-        loading={isLoading}
-        disabled={isLoading}
-      />
-    </Container>
-  );
+  <Container style={{ gap: 25, paddingTop: top + 100 }}>
+    <View style={{ gap: 15 }}>
+      <Typography
+        style={{ fontFamily: "Bold", fontSize: 30 }}
+        interpolation={{ name: "email" }}
+      >
+        Welcome back!
+      </Typography>
+
+      <Typography style={{ fontFamily: "Light", fontSize: 16 }}>
+        Let’s sign you in.
+      </Typography>
+    </View>
+
+    <TextField
+      label="EMAIL"
+      onChangeText={setEmail}
+      placeholder="Enter your email address"
+      placeholderTextColor="#8391A1"
+      value={email}
+    />
+
+    <Button
+      label="NEXT"
+      onPress={onSubmit}
+      loading={isLoading}
+      disabled={isLoading}
+    />
+  </Container>
+);
+
+
+  // return (
+  //   <Container style={{ gap: 25, paddingTop: top + 100 }}>
+  //     <View style={{ gap: 15 }}>
+  //       <Typography
+  //         style={{ fontFamily: "Bold", fontSize: 30 }}
+  //         interpolation={{ name: "email" }}
+  //       >
+  //         {"Welcome back !"}
+  //       </Typography>
+  //       <Typography style={{ fontFamily: "Light", fontSize: 16 }}>
+  //         {"Let’s sign you in."}
+  //       </Typography>
+  //     </View>
+  //     {/* <Controller
+  //       // control={control}
+  //       render={({ field: { onChange, onBlur, value } }) => ( */}
+  //     <TextField
+  //       label="EMAIL"
+  //       onChangeText={(v: string) => setEmail(v)}
+  //       placeholder="Enter your email address"
+  //       placeholderTextColor="#8391A1"
+  //       value={email}
+  //       // onBlur={onBlur}
+  //       // error={!!errors.email?.message}
+  //       // errorMessage={errors.email?.message}
+  //     />
+  //     {/* )}
+  //       name="email" */}
+  //     {/* /> */}
+  //     <Button
+  //       label={"NEXT"}
+  //       onPress={onSubmit}
+  //       loading={isLoading}
+  //       disabled={isLoading}
+  //     />
+  //   </Container>
+  // );
 }
 
 const styles = StyleSheet.create({});

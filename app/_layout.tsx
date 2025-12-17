@@ -13,7 +13,7 @@ export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
-import "react-native-reanimated";
+// import "react-native-reanimated";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -58,7 +58,9 @@ function RootLayoutNav() {
           <Stack.Screen name="/" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
           <Stack.Screen name="tabs" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          <Stack.Screen name="screens" options={{ headerShown: false }} />
         </Stack>
       </QueryClientProvider>
     </ThemeProvider>

@@ -2,17 +2,30 @@ import { AxiosRequestConfig } from "axios";
 import { makeRequest } from "../request";
 import { IUser } from "@services/models/users";
 
-export const login = async (body: { email: string }) => {
+// export const login = async (body: { email: string }) => {
+//   const config: AxiosRequestConfig = {
+//     method: "GET",
+//     url: `Auth/GetLoginCode/${body.email}`,
+//     data: body,
+//   };
+
+//   const response = await makeRequest<Partial<boolean>>(config);
+
+//   return response.data;
+// };
+
+export const login = async (email: string) => {
+  console.log(email, "in the emailservice");
   const config: AxiosRequestConfig = {
     method: "GET",
-    url: `Auth/GetLoginCode/${body.email}`,
-    data: body,
+    url: `Auth/GetLoginCode/${encodeURIComponent(email)}`,
   };
 
   const response = await makeRequest<Partial<boolean>>(config);
-
-  return response.data;
+  console.log(response, "after call");
+  return response;
 };
+
 
 export const validateOtp = async (body: { otp: string }) => {
   const config: AxiosRequestConfig = {

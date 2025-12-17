@@ -2,16 +2,22 @@ import { getItem, removeItem, saveItem } from "@lib/storage";
 import { BASE_URL } from "@lib/utils";
 import { useUser } from "@provider/UserProvider";
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { json } from "zod";
 
 export interface ApiResponse<T = any> {
   data: GenericResponse<T>;
   status: number;
+  responseData?: GenericResponse<T>;
+  requestSuccessful?: boolean;
+  message?: string;
 }
 
 export interface GenericResponse<T = any> {
   status: number;
   message: string;
   data: T;
+  requestSuccessful: boolean;
+  responseData?: T;
 }
 
 type ApiError = AxiosError<ApiResponse>;
@@ -54,12 +60,13 @@ function createApiClient() {
   });
 
   instance.interceptors.request.use((config) => {
+    removeItem("accessToken");
     const token = getItem("accessToken", "string");
-
-    if (token) {
+    console.log("request token ln 59", JSON.stringify(token));
+    if (!token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
+    console.log("request config ln 62", config);
     return config;
   });
 
@@ -86,8 +93,8 @@ function createApiClient() {
             },
           }
         );
-
-        if (response.status === 200) {
+          console.log("error message ", response);
+        if (response?.status === 200) {
           console.log("new refresh and token", response.data);
 
           const newToken = response.data.data.accessToken;
@@ -127,7 +134,9 @@ export async function makeRequest<T = any>(
   callback?: () => void
 ): Promise<ApiResponse<T>> {
   try {
-    const response: AxiosResponse<GenericResponse<T>> = await apiClient(config);
+    console.log("making request to ", config);
+    const response: any = await apiClient(config);
+    console.log("getting response  ", response);
 
     let { status, data } = response;
     logNetworkData(config, status, data);

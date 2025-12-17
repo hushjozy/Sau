@@ -10,6 +10,7 @@ import { useUser } from "@provider/UserProvider";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { login, validateOtp } from "@services/api/users";
 import { useMutation } from "@tanstack/react-query";
+import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -21,6 +22,9 @@ export default function EnterOTP() {
   const { t } = useTypedTranslation();
   const [otp, setOtp] = useState("");
   const [timeLeft, setTimeLeft] = useState(120);
+
+    const { top } = useSafeAreaInsets();
+  
 
   const { bottom } = useSafeAreaInsets();
   const { authenticate } = useUser();
@@ -37,12 +41,14 @@ export default function EnterOTP() {
       { otp },
       {
         onSuccess: (res) => {
-          if (res.data) {
-            console.log(res.data, "datares");
+          if (res?.requestSuccessful) {
+            console.log(res?.responseData, "datares");
 
-            saveItem("accessToken", res.data.accessToken);
-            saveItem("refreshToken", res.data.refreshToken);
+            saveItem("accessToken", res?.responseData?.accessToken);
+            saveItem("refreshToken", res?.responseData?.refreshToken);
             authenticate();
+
+            router.replace("/screens/BuzzFeed/buzzFeedScreen");
           } else {
             showToastModal({
               title: "Invalid OTP code",
@@ -91,11 +97,11 @@ export default function EnterOTP() {
   }, [otp]);
 
   return (
-    <Container>
+    <Container style={{ gap: 25, paddingTop: top + 100 }}>
       <View style={{ gap: 30 }}>
         <Typography
           style={{ fontSize: 16, fontFamily: "Light" }}
-          interpolation={{ email: "joseph.osho.ext@lafarge.com" }}
+          interpolation={{ email: "uduak.umanah.ext@lafarge.com" }}
         >
           {`Enter the verification code we just sent to the email address ${params?.email}`}
         </Typography>
@@ -118,7 +124,7 @@ export default function EnterOTP() {
               <TouchableOpacity
                 onPress={() => {
                   resend(
-                    { email: params?.email },
+                     params?.email as string ,
                     {
                       onSuccess: (res) => {
                         if (res.data) {

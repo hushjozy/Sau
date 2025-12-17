@@ -11,7 +11,7 @@ export function myDebounce<T extends (...args: any[]) => void>(
   cb: T,
   delay: number
 ) {
-  let timer: NodeJs.Timeout;
+  let timer: NodeJS.Timeout;
 
   return function (...args: Parameters<T>) {
     if (timer) clearTimeout(timer);

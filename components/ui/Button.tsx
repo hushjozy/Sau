@@ -1,4 +1,6 @@
+import React, { ComponentPropsWithRef, Ref, forwardRef } from "react";
 import {
+  ActivityIndicator,
   ColorValue,
   DimensionValue,
   Dimensions,
@@ -9,19 +11,20 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import React, { ComponentPropsWithRef, Ref, forwardRef } from "react";
 import { GRAY, PRIMARY, WHITE } from "@constants/colors";
 import { useTheme } from "@provider/ThemeProvider";
 import * as Haptics from "expo-haptics";
 import { useTypedTranslation } from "@locales/i18nHelper";
-import { TranslationKeys } from "@locales/translationKeys.ts";
+import { TranslationKeys } from "@/locales/translationKeys.ts";
 
 const screen = Dimensions.get("screen");
+
+type ButtonType = ComponentPropsWithRef<typeof Pressable>;
 
 interface Props extends ButtonType {
   onPress: () => void;
   label: TranslationKeys;
-  loading?: React.ReactNode;
+  loading?: boolean;
   loadingIcon?: React.ReactNode;
   backgroundColor?: ColorValue;
   width?: DimensionValue;
@@ -33,11 +36,8 @@ interface Props extends ButtonType {
   buttonTextStyle?: TextStyle;
 }
 
-type ButtonType = ComponentPropsWithRef<typeof Pressable>;
-
 function Button(props: Props, ref: Ref<View>) {
   const { theme } = useTheme();
-
   const { t } = useTypedTranslation();
 
   const BG_COLOR = theme === "dark" ? PRIMARY : PRIMARY;
@@ -45,8 +45,8 @@ function Button(props: Props, ref: Ref<View>) {
   const {
     onPress,
     label,
-    loading,
-    loadingIcon = <>/</>,
+    loading = false,
+    loadingIcon,
     backgroundColor = BG_COLOR,
     width = screen.width * 0.9,
     height = 60,
@@ -59,35 +59,42 @@ function Button(props: Props, ref: Ref<View>) {
   } = props;
 
   return (
-    <>
-      <Pressable
-        onPress={() => {
-          Haptics.selectionAsync();
-          onPress();
-        }}
-        style={[
-          styles.container,
-
-          {
-            width: width,
-            height: height,
-            backgroundColor: disabled ? GRAY : backgroundColor,
-            borderRadius: 8,
-          },
-        ]}
-        ref={ref}
-        {...rest}
-      >
-        {loading ? (
-          loadingIcon
-        ) : (
-          <View style={styles.child}>
-            {prefixIcon && prefixIcon}
-            <Text style={{ fontFamily: "SemiBold", color }}>{t(label)}</Text>
-          </View>
-        )}
-      </Pressable>
-    </>
+    <Pressable
+      ref={ref}
+      onPress={() => {
+        if (loading || disabled) return;
+        Haptics.selectionAsync();
+        onPress();
+      }}
+      disabled={loading || disabled}
+      style={[
+        styles.container,
+        {
+          width,
+          height,
+          backgroundColor: disabled || loading ? GRAY : backgroundColor,
+        },
+        buttonContainerStyle,
+      ]}
+      {...rest}
+    >
+      {loading ? (
+        loadingIcon ?? <ActivityIndicator color={color} />
+      ) : (
+        <View style={styles.child}>
+          {prefixIcon}
+          <Text
+            style={[
+              styles.label,
+              { color },
+              buttonTextStyle,
+            ]}
+          >
+            {t(label)}
+          </Text>
+        </View>
+      )}
+    </Pressable>
   );
 }
 
@@ -96,13 +103,17 @@ export default forwardRef(Button);
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    borderRadius: 10,
-    flexDirection: "row",
     justifyContent: "center",
+    borderRadius: 8,
+    flexDirection: "row",
   },
   child: {
-    gap: 5,
     flexDirection: "row",
     alignItems: "center",
+    gap: 6,
+  },
+  label: {
+    fontFamily: "SemiBold",
+    fontSize: 16,
   },
 });
