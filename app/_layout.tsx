@@ -9,6 +9,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import UserProvider from "@/provider/UserProvider";
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -52,17 +53,20 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <QueryClientProvider client={queryClient}>
-        <Stack initialRouteName="auth">
-          <Stack.Screen name="/" options={{ headerShown: false }} />
-          <Stack.Screen name="auth" options={{ headerShown: false }} />
-          <Stack.Screen name="tabs" options={{ headerShown: false }} />
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-          <Stack.Screen name="screens" options={{ headerShown: false }} />
-        </Stack>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider value={DefaultTheme}>
+        <QueryClientProvider client={queryClient}>
+          <Stack initialRouteName="auth">
+            <Stack.Screen name="/" options={{ headerShown: false }} />
+            <Stack.Screen name="auth" options={{ headerShown: false }} />
+            <Stack.Screen name="tabs" options={{ headerShown: false }} />
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="screens" options={{ headerShown: false }} />
+
+            {/* <Stack.Screen name="modal" options={{ presentation: "modal" }} /> */}
+          </Stack>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </UserProvider>
   );
 }

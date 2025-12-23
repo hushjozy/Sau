@@ -1,21 +1,60 @@
-import { useState } from "react";
-import { dummyPosts } from "../data/dummyPosts";
+import { useEffect, useState } from "react";
+import { getPosts } from "@/services/api/buzzServices";
+import { PostDto } from "@/services/models/postDto";
 
 export function useBuzzFeed() {
-  const [posts, setPosts] = useState(dummyPosts);
+  const [posts, setPosts] = useState<PostDto[]>([]);
   const [activeTab, setActiveTab] = useState("All");
   const [loading, setLoading] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const pageSize = 20;
+
   const tabs = ["All", "Posts", "Recognitions"];
 
-  const loadMore = () => {
-    if (loading) return;
+   useEffect(() => {
+    resetAndFetch();
+  }, [activeTab]);
+
+  const resetAndFetch = async () => {
+    setPage(1);
+    setHasMore(true);
+    setPosts([]);
+    await fetchPosts(1, true);
+  };
+
+  const fetchPosts = async (pageNumber: number, replace = false) => {
+    if (loading || !hasMore) return;
+
     setLoading(true);
 
-    setTimeout(() => {
-      setPosts((prev) => [...prev, ...dummyPosts]);
+    try {
+      const res = await getPosts(
+        activeTab === "All" ? "" : activeTab,
+        pageNumber,
+        pageSize
+      );
+
+      setPosts((prev) =>
+        replace ? res.responseData : [...prev, ...res.responseData]
+      );
+
+      setHasMore(pageNumber < res?.data?.totalCount / pageSize);
+      setPage(pageNumber);
+    } catch (error) {
+      console.error("Failed to fetch posts", error);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+  };
+
+  /* 🔹 Pagination (FlatList onEndReached) */
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      fetchPosts(page + 1);
+    }
   };
 
   return {

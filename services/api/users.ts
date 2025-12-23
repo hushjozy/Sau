@@ -37,6 +37,7 @@ export const validateOtp = async (body: { otp: string }) => {
   const response = await makeRequest<{
     accessToken: string;
     refreshToken: string;
+    profile: IUser;
   }>(config);
   console.log(response);
 

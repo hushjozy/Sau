@@ -7,6 +7,10 @@ export const BASE_URL = {
   production: "https://sauapi.lapapps.ng/api/",
 }[ENVIRONMENT_ENV];
 
+export const IMG_URL = {
+  imgUrl: "https://sauapi.lapapps.ng/",
+}; 
+
 export function myDebounce<T extends (...args: any[]) => void>(
   cb: T,
   delay: number

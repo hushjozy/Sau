@@ -27,7 +27,7 @@ export default function EnterOTP() {
   
 
   const { bottom } = useSafeAreaInsets();
-  const { authenticate } = useUser();
+  const { authenticate, updateUserDetails } = useUser();
   const { showToastModal } = useToast();
 
   const { mutate: authenticateMutation, isPending: isAuthenticating } =
@@ -42,10 +42,12 @@ export default function EnterOTP() {
       {
         onSuccess: (res) => {
           if (res?.requestSuccessful) {
-            console.log(res?.responseData, "datares");
+            // console.log(res?.responseData, "datares");
 
             saveItem("accessToken", res?.responseData?.accessToken);
             saveItem("refreshToken", res?.responseData?.refreshToken);
+            // saveItem("user", res?.responseData?.profile);
+            updateUserDetails(res?.responseData?.profile?? null);
             authenticate();
 
             router.replace("/screens/BuzzFeed/buzzFeedScreen");

@@ -14,7 +14,8 @@ export default function Onboarding() {
 
       <Pressable
         style={styles.button}
-        onPress={() => router.push("/auth/login")}
+        // onPress={() => router.push("/auth/login")}
+        onPress={() => router.push("/screens/BuzzFeed/buzzFeedScreen")}
       >
         <Text style={styles.buttonText}>Get Started</Text>
       </Pressable>

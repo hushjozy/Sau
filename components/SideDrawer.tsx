@@ -10,6 +10,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useUser } from "@/provider/UserProvider";
 
 type SideDrawerProps = {
   isOpen: boolean;
@@ -19,6 +20,9 @@ type SideDrawerProps = {
 export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
   const { width } = Dimensions.get("window");
   const slideAnim = useRef(new Animated.Value(-width)).current;
+
+  const {user} = useUser();
+  console.log(user, "userdrawer");
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -46,16 +50,17 @@ export const SideDrawer: React.FC<SideDrawerProps> = ({ isOpen, onClose }) => {
           <View style={styles.headerSection}>
             <View style={styles.profileRow}>
               <View style={styles.avatar}>
-                <Text style={styles.avatarText}>KO</Text>
+                <Text style={styles.avatarText}>{user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}</Text>
               </View>
 
               <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>Kehinde OSHUNGBOYE</Text>
-                <Text style={styles.profileLocation}>Nigeria</Text>
+                <Text style={styles.profileName}>{user?.firstName} {user?.lastName}</Text>
+                <Text style={styles.profileLocation}>{user?.position}</Text>
+                <Text style={styles.profileLocation}>{user?.locationName}</Text>
 
-                <Pressable onPress={() => {}}>
+                {/* <Pressable onPress={() => {}}>
                   <Text style={styles.changeLocation}>Change Location</Text>
-                </Pressable>
+                </Pressable> */}
               </View>
             </View>
 
