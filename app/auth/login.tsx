@@ -8,7 +8,7 @@ import Button from "@/components/ui/Button";
 import TextField from "@/components/ui/TextField";
 import Container from "@/components/ui/Container";
 import { login } from "@/services/api/users";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 const validationSchema = z.object({
   email: z
@@ -17,135 +17,68 @@ const validationSchema = z.object({
     .email("Must be a valid email"),
 });
 
-type ValidationSchema = z.infer<typeof validationSchema>;
-
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
-  const [submit, setSubmit] = useState(false);
-
   const { top } = useSafeAreaInsets();
-  // const { showToastModal } = useToast();
-  const {
-    data: loggedIn,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["login", email, submit],
-    queryFn: () => login(email),
-  });
-
-  // const {
-  //   control,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm<ValidationSchema>({ resolver: zodResolver(validationSchema) });
 
   const loginMutation = useMutation({
     mutationFn: (email: string) => login(email),
 
     onSuccess: (res, email) => {
-      // console.log(res, "loginres");
       if (res?.data?.requestSuccessful) {
-        console.log(res);
-
         router.push({
           pathname: "/auth/otp",
           params: { email },
         });
       } else {
-        // showToastModal({
-        //   title: "Failed to login",
-        //   type: "error",
-        //   duration: 5000,
-        // });
+        // handle failed login
       }
     },
 
     onError: (error: any) => {
       const errorMessage = error?.error?.errors?.[0];
-      // showToastModal({
-      //   title: errorMessage ?? "Failed to login",
-      //   type: "error",
-      //   duration: 5000,
-      // });
+      // handle error toast
     },
   });
 
   const onSubmit = () => {
-    // console.log("submitting", email);
+    // Prevent empty or invalid email submission
+    const result = validationSchema.safeParse({ email });
+    if (!result.success) return;
+
     loginMutation.mutate(email);
   };
 
   return (
-  <Container style={{ gap: 25, paddingTop: top + 100 }}>
-    <View style={{ gap: 15 }}>
-      <Typography
-        style={{ fontFamily: "Bold", fontSize: 30 }}
-        interpolation={{ name: "email" }}
-      >
-        Welcome back!
-      </Typography>
+    <Container style={{ gap: 25, paddingTop: top + 100 }}>
+      <View style={{ gap: 15 }}>
+        <Typography style={{ fontFamily: "Bold", fontSize: 30 }}>
+          Welcome back!
+        </Typography>
 
-      <Typography style={{ fontFamily: "Light", fontSize: 16 }}>
-        Let’s sign you in.
-      </Typography>
-    </View>
+        <Typography style={{ fontFamily: "Light", fontSize: 16 }}>
+          Let’s sign you in.
+        </Typography>
+      </View>
 
-    <TextField
-      label="EMAIL"
-      onChangeText={setEmail}
-      placeholder="Enter your email address"
-      placeholderTextColor="#8391A1"
-      value={email}
-    />
+      <TextField
+        label="EMAIL"
+        onChangeText={setEmail}
+        placeholder="Enter your email address"
+        placeholderTextColor="#8391A1"
+        value={email}
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
 
-    <Button
-      label="NEXT"
-      onPress={onSubmit}
-      loading={isLoading}
-      disabled={isLoading}
-    />
-  </Container>
-);
-
-
-  // return (
-  //   <Container style={{ gap: 25, paddingTop: top + 100 }}>
-  //     <View style={{ gap: 15 }}>
-  //       <Typography
-  //         style={{ fontFamily: "Bold", fontSize: 30 }}
-  //         interpolation={{ name: "email" }}
-  //       >
-  //         {"Welcome back !"}
-  //       </Typography>
-  //       <Typography style={{ fontFamily: "Light", fontSize: 16 }}>
-  //         {"Let’s sign you in."}
-  //       </Typography>
-  //     </View>
-  //     {/* <Controller
-  //       // control={control}
-  //       render={({ field: { onChange, onBlur, value } }) => ( */}
-  //     <TextField
-  //       label="EMAIL"
-  //       onChangeText={(v: string) => setEmail(v)}
-  //       placeholder="Enter your email address"
-  //       placeholderTextColor="#8391A1"
-  //       value={email}
-  //       // onBlur={onBlur}
-  //       // error={!!errors.email?.message}
-  //       // errorMessage={errors.email?.message}
-  //     />
-  //     {/* )}
-  //       name="email" */}
-  //     {/* /> */}
-  //     <Button
-  //       label={"NEXT"}
-  //       onPress={onSubmit}
-  //       loading={isLoading}
-  //       disabled={isLoading}
-  //     />
-  //   </Container>
-  // );
+      <Button
+        label="NEXT"
+        onPress={onSubmit}
+        loading={loginMutation.isPending}
+        disabled={loginMutation.isPending}
+      />
+    </Container>
+  );
 }
 
 const styles = StyleSheet.create({});

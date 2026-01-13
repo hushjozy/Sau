@@ -91,8 +91,16 @@ export const getInitials = (name: string) => {
         .toUpperCase()
     : "--";
 };
-export const formatDate = (date: Date) => {
-  return date.toLocaleDateString("en-US", {
+export const formatDate = (date: string | Date) => {
+  if (!date) return "";
+
+  const parsedDate = typeof date === "string"
+    ? new Date(date)
+    : date;
+
+  if (isNaN(parsedDate.getTime())) return "";
+
+  return parsedDate.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -111,3 +119,17 @@ export const formatLabel = (text: string) => {
     .replace(/([A-Z])/g, " $1") // insert space before capital letters
     .replace(/^./, (str) => str.toUpperCase()); // capitalize first letter
 };
+
+export const formatNumber = (num?: number | null): string => {
+  const value = typeof num === "number" && !isNaN(num) ? num : 0;
+  const absValue = Math.abs(Math.round(value));
+  
+  try {
+    return "₦" + new Intl.NumberFormat("en-NG", { maximumFractionDigits: 0 }).format(absValue);
+  } catch (e) {
+    return "₦" + absValue.toString();
+  }
+};
+
+
+

@@ -6,6 +6,7 @@ export interface PostDto {
     senderEmail:        string;
     senderFunction:     string;
     awardId:            number;
+    awardImageUrl:      string;
     message:            string;
     likeCount:          number;
     commentCount:       number;

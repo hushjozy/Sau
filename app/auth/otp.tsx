@@ -92,11 +92,11 @@ export default function EnterOTP() {
     .toString()
     .padStart(2, "0");
 
-  useEffect(() => {
-    if (otp.length === 4) {
-      handleVerify();
-    }
-  }, [otp]);
+  // useEffect(() => {
+  //   if (otp.length === 4) {
+  //     handleVerify();
+  //   }
+  // }, [otp]);
 
   return (
     <Container style={{ gap: 25, paddingTop: top + 100 }}>
@@ -174,7 +174,7 @@ export default function EnterOTP() {
         <Button
           label="VERIFY"
           onPress={handleVerify}
-          disabled={otp.length === 0 || isAuthenticating}
+          disabled={otp.length !== 4 || isAuthenticating}
           loading={isAuthenticating}
         />
       </View>

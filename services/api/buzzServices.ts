@@ -3,38 +3,37 @@ import { makeRequest } from "../request";
 import { IUser } from "@services/models/users";
 import { PostDto } from "../models/postDto";
 import { CommentDto } from "../models/commentDto";
+import { LikeDto } from "../models/likeDto";
+import { SaveCommentVm } from "../models/requests/saveCommentVm";
+import { SaveLikeVm } from "../models/requests/saveLikeVm";
 
 
+export const savePost = async (formData: FormData) => {
+  
+  const config: AxiosRequestConfig = {
+    method: "POST",
+    url: `Buzz/SavePost`,
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
 
+  const response = await makeRequest<{
+    responseData: PostDto;
+    requestSuccessful: boolean;
+    responseCode: string;
+    message: string;
+  }>(config);
 
+  console.log("Save Post Response:", response.data);
 
-// export const validateOtp = async (body: { otp: string }) => {
-//   const config: AxiosRequestConfig = {
-//     method: "POST",
-//     url: `Auth/ValidateLoginCode/${body.otp}`,
-//     data: body,
-//   };
+  if (!response.data?.requestSuccessful) {
+    throw new Error(response.data?.message || "Failed to save post");
+  }
 
-//   const response = await makeRequest<{
-//     accessToken: string;
-//     refreshToken: string;
-//     profile: IUser;
-//   }>(config);
-//   console.log(response);
-
-//   return response.data;
-// };
-
-// export const me = async () => {
-//   const config: AxiosRequestConfig = {
-//     method: "GET",
-//     url: "Users/me",
-//   };
-
-//   const response = await makeRequest<IUser>(config);
-
-//   return response.data;
-// };
+  return response.data.responseData;
+};
 
 export const getPosts = async (
   search: string,
@@ -55,12 +54,10 @@ export const getPosts = async (
     totalPages: number;
   }>(config);
 
-  // console.log(response, "getPosts response");
   return response.data;
 };
 
 export const getComments = async (reference: string) => {
-  // console.log(email, "in the emailservice");
   const config: AxiosRequestConfig = {
     method: "GET",
     url: `Buzz/GetCommentsOfPost/${encodeURIComponent(reference)}`,
@@ -71,21 +68,78 @@ export const getComments = async (reference: string) => {
     requestSuccessful: boolean;
     responseCode: string;
   }>(config);
-  console.log(response, "after call");
   return response;
 };
 
-// export const uploadImage = async (body: FormData, userId: string) => {
-//   const config: AxiosRequestConfig = {
-//     method: "POST",
-//     url: `Users/${userId}/upload`,
-//     data: body,
-//     headers: {
-//       "Content-Type": "multipart/form-data",
-//     },
-//   };
+export const saveComment = async (payload: SaveCommentVm) => {
+  
+  const config: AxiosRequestConfig = {
+    method: "POST",
+    url: `Buzz/saveComment`,
+    data: payload, // Send payload directly, not wrapped in { request: ... }
+  };
 
-//   const response = await makeRequest<{ imageUrl: string }>(config);
+  const response = await makeRequest<{
+    responseData: CommentDto;
+    requestSuccessful: boolean;
+    responseCode: string;
+    message: string;
+  }>(config);
 
-//   return response.data;
-// };
+  if (!response.data?.requestSuccessful) {
+    throw new Error(response.data?.message || "Failed to save comment");
+  }
+
+  return response.data.responseData;
+};
+
+export const saveLike = async (payload: SaveLikeVm) => {
+  
+  const config: AxiosRequestConfig = {
+    method: "POST",
+    url: `Buzz/saveLike`,
+    data: payload, // Send payload directly, not wrapped in { request: ... }
+  };
+
+  const response = await makeRequest<{
+    responseData: LikeDto;
+    requestSuccessful: boolean;
+    responseCode: string;
+    message: string;
+  }>(config);
+
+  if (!response.data?.requestSuccessful) {
+    throw new Error(response.data?.message || "Failed to save like");
+  }
+
+  return response.data.responseData;
+};
+
+export const getLikes = async (reference: string) => {
+  const config: AxiosRequestConfig = {
+    method: "GET",
+    url: `Buzz/GetLikesOfPost/${encodeURIComponent(reference)}`,
+  };
+
+  const response = await makeRequest<{
+    responseData: LikeDto[];
+    requestSuccessful: boolean;
+    responseCode: string;
+  }>(config);
+  return response;
+};
+
+export const unlike = async (id: number, isOnPost: boolean) => {
+  const config: AxiosRequestConfig = {
+    method: "DELETE",
+    url: `Buzz/Unlike/${id}/${isOnPost}`,
+  };
+
+  const response = await makeRequest<{
+    responseData: LikeDto;
+    requestSuccessful: boolean;
+    responseCode: string;
+  }>(config);
+  return response;
+};
+
